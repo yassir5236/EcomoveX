@@ -10,24 +10,24 @@ public class OffrePromotionnelleService {
     private final OffrePromotionnelleDAO offrePromotionnelleDAO = new OffrePromotionnelleDAO();
 
     public void addOffrePromotionnelle(OffrePromotionnelle offrePromotionnelle) {
-        offrePromotionnelleDAO.ajouterOffre(offrePromotionnelle);
+        offrePromotionnelleDAO.addOffrePromotionnelle(offrePromotionnelle);
 
     }
 
     public List<OffrePromotionnelle> getAllOffresPromotionnelles() {
-        return offrePromotionnelleDAO.lireToutesLesOffres();
+        return offrePromotionnelleDAO.getAllOffresPromotionnelles();
 
     }
 
     public OffrePromotionnelle getOffrePromotionnelleById(UUID id) {
-        return offrePromotionnelleDAO.lireOffre(id);
+        return offrePromotionnelleDAO.getOffreById(id);
     }
 
     public void updateOffrePromotionnelle(OffrePromotionnelle offrePromotionnelle) {
-        offrePromotionnelleDAO.modifierOffre(offrePromotionnelle);
+        offrePromotionnelleDAO.updateOffrePromotionnelle(offrePromotionnelle);
     }
 
     public void deleteOffrePromotionnelle(UUID id) {
-        offrePromotionnelleDAO.supprimerOffre(id);
+        offrePromotionnelleDAO.deleteOffrePromotionnelle(id);
     }
 }
