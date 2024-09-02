@@ -6,9 +6,21 @@ public class Main {
 
 
     public static void main(String[] args) {
+        console.ui.MainConsole MainConsole = new console.ui.MainConsole();
+        MainConsole.start();
+    }
+
+
+
+
+
+
+    /*   public static void main(String[] args) {
         console.ui.OffreUI OffreUI = new console.ui.OffreUI();
         OffreUI.start();
     }
+
+  */
 
 
 

@@ -3,7 +3,7 @@ package console.ui;
 import java.util.Scanner;
 import console.commands.*;
 
-public class ConsoleUI {
+public class PartenaireUI {
     private final PartenaireCommands partenaireCommands = new PartenaireCommands();
 
     public void start() {

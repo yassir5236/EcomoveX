@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 
 
-public class ContratUI2 {
+public class ContratUI {
     private final Scanner scanner = new Scanner(System.in);
     private final ContratCommands contratCommands = new ContratCommands();
 
