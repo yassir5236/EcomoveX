@@ -42,17 +42,17 @@ public class PartenaireDAO {
 
     // Mettre à jour un partenaire
     public void modifierPartenaire(Partenaire partenaire) {
-        String sql = "UPDATE partenaire SET nom_compagnie = ?, contact_commercial = ?, type_transport = ?, zone_geographique = ?, conditions_speciales = ?, statut_partenaire = ?, date_creation = ? WHERE id = ?";
+        String sql = "UPDATE partenaire SET nom_compagnie = ?, contact_commercial = ?, type_transport = CAST(? AS type_transport), zone_geographique = ?, conditions_speciales = ?, statut_partenaire = CAST(? AS statut_partenaire), date_creation = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, partenaire.getNomCompagnie());
             pstmt.setString(2, partenaire.getContactCommercial());
-            pstmt.setString(3, partenaire.getTypeTransport().name().toLowerCase());
+            pstmt.setString(3, partenaire.getTypeTransport().name().toLowerCase());  // Conversion en minuscules
             pstmt.setString(4, partenaire.getZoneGeographique());
             pstmt.setString(5, partenaire.getConditionsSpeciales());
-            pstmt.setString(6, partenaire.getStatutPartenaire().name().toLowerCase());
+            pstmt.setString(6, partenaire.getStatutPartenaire().name().toLowerCase());  // Conversion en minuscules
             pstmt.setDate(7, new java.sql.Date(partenaire.getDateCreation().getTime()));
             pstmt.setObject(8, partenaire.getId());
 
@@ -61,6 +61,7 @@ public class PartenaireDAO {
             e.printStackTrace();
         }
     }
+
 
     // Supprimer un partenaire
     public void supprimerPartenaire(UUID id) {
@@ -95,17 +96,7 @@ public class PartenaireDAO {
                 Date sqlDate = rs.getDate("date_creation");
                 java.util.Date utilDate = new java.util.Date(sqlDate.getTime());
 
-              /*  partenaire = new Partenaire(
-                        (UUID) rs.getObject("id"),
-                        rs.getString("nom_compagnie"),
-                        rs.getString("contact_commercial"),
-                        TypeTransport.valueOf(rs.getString("type_transport")),
-                        rs.getString("zone_geographique"),
-                        rs.getString("conditions_speciales"),
-                        StatutPartenaire.valueOf(rs.getString("statut_partenaire")),
-                        utilDate
-                );
-                */
+
 
 
                 partenaire = new Partenaire(

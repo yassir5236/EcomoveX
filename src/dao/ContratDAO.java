@@ -1,7 +1,6 @@
 package dao;
 
-import model.Contrat;
-import model.StatutContrat;
+import model.*;
 import util.DatabaseConnection;
 
 import java.sql.*;
@@ -12,18 +11,27 @@ import java.util.UUID;
 public class ContratDAO {
 
     public void addContrat(Contrat contrat) {
-        String query = "INSERT INTO contrats (id, date_debut, date_fin, tarif_special, conditions_acord, renouvelable, statut_contrat) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO contrat (id, date_debut, date_fin, tarif_special, conditions_accord, renouvelable, statut_contrat, partenaire_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?::statut_contrat, ?)";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, contrat.getId());
-            statement.setDate(2, new java.sql.Date(contrat.getDateDebut().getTime())); // Conversion correcte
-            statement.setDate(3, new java.sql.Date(contrat.getDateFin().getTime())); // Conversion correcte
+            statement.setDate(2, new java.sql.Date(contrat.getDateDebut().getTime()));
+
+            // Vérifie si la date de fin est null
+            if (contrat.getDateFin() != null) {
+                statement.setDate(3, new java.sql.Date(contrat.getDateFin().getTime()));
+            } else {
+                statement.setNull(3, Types.DATE); // Insère NULL dans la base de données
+            }
+
             statement.setBigDecimal(4, contrat.getTarifSpecial());
             statement.setString(5, contrat.getConditionsAccord());
             statement.setBoolean(6, contrat.isRenouvelable());
-            statement.setString(7, contrat.getStatutContrat().name());
+            statement.setString(7, contrat.getStatutContrat().name().toLowerCase());
+            statement.setObject(8, contrat.getPartenaireId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -31,9 +39,10 @@ public class ContratDAO {
         }
     }
 
+
     public List<Contrat> getAllContrats() {
         List<Contrat> contrats = new ArrayList<>();
-        String query = "SELECT * FROM contrats";
+        String query = "SELECT * FROM contrat";
 
         try (Connection connection = DatabaseConnection.getConnection();
              Statement statement = connection.createStatement();
@@ -41,14 +50,22 @@ public class ContratDAO {
 
             while (resultSet.next()) {
                 Contrat contrat = new Contrat(
+                        UUID.fromString(resultSet.getString("id")),
                         resultSet.getDate("date_debut"),
                         resultSet.getDate("date_fin"),
                         resultSet.getBigDecimal("tarif_special"),
-                        resultSet.getString("conditions_acord"),
+                        resultSet.getString("conditions_accord"),
                         resultSet.getBoolean("renouvelable"),
-                        StatutContrat.valueOf(resultSet.getString("statut_contrat"))
+                        StatutContrat.valueOf(resultSet.getString("statut_contrat").toUpperCase())
                 );
-                contrat.setId(UUID.fromString(resultSet.getString("id")));
+
+                // Extraction de l'ID du partenaire s'il n'est pas null
+                String partenaireIdStr = resultSet.getString("partenaire_id");
+                if (partenaireIdStr != null) {
+                    UUID partenaireId = UUID.fromString(partenaireIdStr);
+                    contrat.setPartenaireId(partenaireId);
+                }
+
                 contrats.add(contrat);
             }
         } catch (SQLException e) {
@@ -58,9 +75,10 @@ public class ContratDAO {
         return contrats;
     }
 
+
     public Contrat getContratById(UUID id) {
         Contrat contrat = null;
-        String query = "SELECT * FROM contrats WHERE id = ?";
+        String query = "SELECT * FROM contrat WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -73,12 +91,17 @@ public class ContratDAO {
                         resultSet.getDate("date_debut"),
                         resultSet.getDate("date_fin"),
                         resultSet.getBigDecimal("tarif_special"),
-                        resultSet.getString("conditions_acord"),
+                        resultSet.getString("conditions_accord"),
                         resultSet.getBoolean("renouvelable"),
-                        StatutContrat.valueOf(resultSet.getString("statut_contrat"))
+                        StatutContrat.valueOf(resultSet.getString("statut_contrat").toUpperCase())
                 );
                 contrat.setId(id);
             }
+
+
+
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,7 +110,7 @@ public class ContratDAO {
     }
 
     public void updateContrat(Contrat contrat) {
-        String query = "UPDATE contrats SET date_debut = ?, date_fin = ?, tarif_special = ?, conditions_acord = ?, renouvelable = ?, statut_contrat = ? WHERE id = ?";
+        String query = "UPDATE contrat SET date_debut = ?, date_fin = ?, tarif_special = ?, conditions_accord = ?, renouvelable = ?, statut_contrat = CAST(? AS statut_contrat) WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -97,7 +120,7 @@ public class ContratDAO {
             statement.setBigDecimal(3, contrat.getTarifSpecial());
             statement.setString(4, contrat.getConditionsAccord());
             statement.setBoolean(5, contrat.isRenouvelable());
-            statement.setString(6, contrat.getStatutContrat().name());
+            statement.setString(6, contrat.getStatutContrat().name().toLowerCase());
             statement.setObject(7, contrat.getId());
 
             statement.executeUpdate();
@@ -107,7 +130,7 @@ public class ContratDAO {
     }
 
     public void deleteContrat(UUID id) {
-        String query = "DELETE FROM contrats WHERE id = ?";
+        String query = "DELETE FROM contrat WHERE id = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

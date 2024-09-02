@@ -12,6 +12,7 @@ public class Contrat {
     private String conditionsAccord;
     private boolean renouvelable;
     private StatutContrat statutContrat;
+    private UUID partenaireId;
 
     // Constructeur pour création de nouveau contrat
     public Contrat(Date dateDebut, Date dateFin, BigDecimal tarifSpecial,
@@ -35,6 +36,7 @@ public class Contrat {
         this.conditionsAccord = conditionsAccord;
         this.renouvelable = renouvelable;
         this.statutContrat = statutContrat;
+        this.partenaireId = partenaireId;
     }
 
     // Getters et Setters
@@ -93,4 +95,28 @@ public class Contrat {
     public void setStatutContrat(StatutContrat statutContrat) {
         this.statutContrat = statutContrat;
     }
+
+    public UUID getPartenaireId() {
+        return partenaireId;
+    }
+
+    public void setPartenaireId(UUID partenaireId) {
+        this.partenaireId = partenaireId;
+    }
+
+    @Override
+    public String toString() {
+        return "Contrat {" +
+                "ID = " + id +
+                ", Date de début = " + dateDebut +
+                ", Date de fin = " + (dateFin != null ? dateFin : "Indéfinie") +
+                ", Tarif spécial = " + tarifSpecial +
+                ", Conditions de l'accord = '" + conditionsAccord + '\'' +
+                ", Renouvelable = " + (renouvelable ? "Oui" : "Non") +
+                ", Statut du contrat = " + statutContrat +
+                ", PartenaireID = " + partenaireId +
+                '}';
+    }
+
+
 }
