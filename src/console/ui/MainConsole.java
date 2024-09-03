@@ -4,7 +4,7 @@ import console.ui.PartenaireUI;
 
 import console.ui.ContratUI;
 import console.ui.OffreUI;
-//import console.ui.BilletUI;
+import console.ui.BilletUI;
 
 import java.util.Scanner;
 
@@ -13,13 +13,13 @@ public class MainConsole {
     private final PartenaireUI partenaireUI;
     private final ContratUI contratUI;
     private final OffreUI offreUI;
-    //private final BilletUI billetUI;
+    private final BilletUI billetUI;
 
     public MainConsole() {
         this.partenaireUI = new PartenaireUI();
         this.contratUI = new ContratUI();
         this.offreUI = new OffreUI();
-        //this.billetUI = new BilletUI();
+        this.billetUI = new BilletUI();
     }
 
     public void start() {
@@ -48,7 +48,7 @@ public class MainConsole {
                     offreUI.start();
                     break;
                 case 4:
-                    //billetUI.start();
+                    billetUI.start();
                     break;
                 case 5:
                     System.out.println("Au revoir!");

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+
 public class ContratDAO {
 
     public void addContrat(Contrat contrat) {
