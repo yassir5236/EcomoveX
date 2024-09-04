@@ -11,7 +11,7 @@ public class ContratUI {
     private final Scanner scanner = new Scanner(System.in);
     private final ContratCommands contratCommands = new ContratCommands();
 
-    public void start() {
+    public void start(Scanner scanner) {
         while (true) {
             System.out.println("=== Menu Gestion des Contrats ===");
             System.out.println("1. Ajouter un contrat");

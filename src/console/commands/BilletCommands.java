@@ -23,42 +23,9 @@ public class BilletCommands {
         this.billetDAO = new BilletDAO();
     }
 
- /*   public void ajouterBillet() {
-        Scanner scanner = new Scanner(System.in);
 
-        //System.out.print("ID (UUID) : ");
-        // UUID id = UUID.fromString(scanner.nextLine());
-        UUID id = UUID.randomUUID();
 
-        System.out.print("Entrez l'ID du contrat associé : ");
-        String contratIdStr = scanner.nextLine();
-        UUID contratId = UUID.fromString(contratIdStr);
-
-        System.out.print("Type de transport (avion, train, bus, etc.) : ");
-        TypeTransport typeTransport = TypeTransport.valueOf(scanner.nextLine().toUpperCase());
-
-        System.out.print("Prix d'achat : ");
-        BigDecimal prixAchat = scanner.nextBigDecimal();
-
-        System.out.print("Prix de vente : ");
-        BigDecimal prixVente = scanner.nextBigDecimal();
-
-        System.out.print("Date de vente (YYYY-MM-DD HH:MM:SS) : ");
-        LocalDateTime dateVente = LocalDateTime.parse(scanner.nextLine());
-
-        System.out.print("Statut du billet (vendu, annulé, en attente) : ");
-        StatutBillet statutBillet = StatutBillet.valueOf(scanner.nextLine().toUpperCase());
-
-        // Notez que vous passez ici deux UUID au constructeur
-        Billet billet = new Billet(id, contratId, typeTransport, prixAchat, prixVente, Date.valueOf(dateVente.toLocalDate()), statutBillet);
-        billetDAO.addBillet(billet);
-
-        System.out.println("Billet ajouté avec succès!");
-    }
-
-  */
-
-    public void ajouterBillet() {
+   /* public void ajouterBillet() {
         Scanner scanner = new Scanner(System.in);
 
         UUID id = UUID.randomUUID();
@@ -99,6 +66,87 @@ public class BilletCommands {
         System.out.println("Billet ajouté avec succès!");
     }
 
+    */
+
+    public void ajouterBillet() {
+        System.out.println("=== Ajouter un billet ===");
+        Scanner scanner = new Scanner(System.in);
+
+
+        UUID id = UUID.randomUUID();
+
+        UUID contratId = null;
+        while (contratId == null) {
+            try {
+                System.out.print("Entrez l'ID du contrat associé : ");
+                String contratIdStr = scanner.nextLine();
+                contratId = UUID.fromString(contratIdStr);
+            } catch (IllegalArgumentException e) {
+                System.out.println("ID du contrat invalide. Veuillez entrer un UUID valide.");
+            }
+        }
+
+        TypeTransport typeTransport = null;
+        while (typeTransport == null) {
+            try {
+                System.out.print("Type de transport (AVION, TRAIN, BUS) : ");
+                typeTransport = TypeTransport.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Type de transport invalide. Veuillez choisir entre AVION, TRAIN, BUS.");
+            }
+        }
+
+        BigDecimal prixAchat = null;
+        while (prixAchat == null) {
+            try {
+                System.out.print("Prix d'achat : ");
+                prixAchat = new BigDecimal(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Prix d'achat invalide. Veuillez entrer un montant valide.");
+            }
+        }
+
+        BigDecimal prixVente = null;
+        while (prixVente == null) {
+            try {
+                System.out.print("Prix de vente : ");
+                prixVente = new BigDecimal(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Prix de vente invalide. Veuillez entrer un montant valide.");
+            }
+        }
+
+        LocalDateTime dateVente = null;
+        while (dateVente == null) {
+            try {
+                System.out.print("Date de vente (YYYY-MM-DD HH:MM:SS) : ");
+                String dateVenteInput = scanner.nextLine();
+                dateVente = LocalDateTime.parse(dateVenteInput, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                if (dateVente.isBefore(LocalDateTime.now())) {
+                    System.out.println("La date de vente ne peut pas être antérieure à la date et l'heure actuelles. Veuillez réessayer.");
+                    dateVente = null;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Erreur : Le format de la date est incorrect. Veuillez entrer une date au format YYYY-MM-DD HH:MM:SS.");
+            }
+        }
+
+        StatutBillet statutBillet = null;
+        while (statutBillet == null) {
+            try {
+                System.out.print("Statut du billet (VENDU, ANNULE, EN_ATTENTE) : ");
+                statutBillet = StatutBillet.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Statut du billet invalide. Veuillez choisir entre VENDU, ANNULE, EN_ATTENTE.");
+            }
+        }
+
+        Billet billet = new Billet(id, contratId, typeTransport, prixAchat, prixVente, Date.valueOf(dateVente.toLocalDate()), statutBillet);
+        billetDAO.addBillet(billet);
+
+        System.out.println("Billet ajouté avec succès!");
+    }
+
 
 
 
@@ -110,7 +158,7 @@ public class BilletCommands {
         }
     }
 
-    public void mettreAJourBillet() {
+   /* public void mettreAJourBillet() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("ID du billet à mettre à jour (UUID) : ");
@@ -151,7 +199,93 @@ public class BilletCommands {
 
         System.out.println("Billet mis à jour avec succès!");
     }
+*/
 
+    public void mettreAJourBillet() {
+        System.out.println("=== Mettre à jour un billet ===");
+        Scanner scanner = new Scanner(System.in);
+
+        UUID id = null;
+        while (id == null) {
+            try {
+                System.out.print("ID du billet à mettre à jour (UUID) : ");
+                id = UUID.fromString(scanner.nextLine());
+            } catch (IllegalArgumentException e) {
+                System.out.println("ID de billet invalide. Veuillez entrer un UUID valide.");
+            }
+        }
+
+        UUID contratId = null;
+        while (contratId == null) {
+            try {
+                System.out.print("Entrez l'ID du contrat associé : ");
+                String contratIdStr = scanner.nextLine();
+                contratId = UUID.fromString(contratIdStr);
+            } catch (IllegalArgumentException e) {
+                System.out.println("ID du contrat invalide. Veuillez entrer un UUID valide.");
+            }
+        }
+
+        TypeTransport typeTransport = null;
+        while (typeTransport == null) {
+            try {
+                System.out.print("Nouveau type de transport (AVION, TRAIN, BUS) : ");
+                typeTransport = TypeTransport.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Type de transport invalide. Veuillez choisir entre AVION, TRAIN, BUS.");
+            }
+        }
+
+        BigDecimal prixAchat = null;
+        while (prixAchat == null) {
+            try {
+                System.out.print("Nouveau prix d'achat : ");
+                prixAchat = new BigDecimal(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Prix d'achat invalide. Veuillez entrer un montant valide.");
+            }
+        }
+
+        BigDecimal prixVente = null;
+        while (prixVente == null) {
+            try {
+                System.out.print("Nouveau prix de vente : ");
+                prixVente = new BigDecimal(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Prix de vente invalide. Veuillez entrer un montant valide.");
+            }
+        }
+
+        LocalDateTime dateVente = null;
+        while (dateVente == null) {
+            try {
+                System.out.print("Nouvelle date de vente (YYYY-MM-DD HH:MM:SS) : ");
+                String dateVenteInput = scanner.nextLine();
+                dateVente = LocalDateTime.parse(dateVenteInput, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                if (dateVente.isBefore(LocalDateTime.now())) {
+                    System.out.println("La date de vente ne peut pas être antérieure à la date et l'heure actuelles. Veuillez réessayer.");
+                    dateVente = null;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Erreur : Le format de la date est incorrect. Veuillez entrer une date au format YYYY-MM-DD HH:MM:SS.");
+            }
+        }
+
+        StatutBillet statutBillet = null;
+        while (statutBillet == null) {
+            try {
+                System.out.print("Nouveau statut du billet (VENDU, ANNULE, EN_ATTENTE) : ");
+                statutBillet = StatutBillet.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Statut du billet invalide. Veuillez choisir entre VENDU, ANNULE, EN_ATTENTE.");
+            }
+        }
+
+        Billet billet = new Billet(id, contratId, typeTransport, prixAchat, prixVente, Date.valueOf(dateVente.toLocalDate()), statutBillet);
+        billetDAO.updateBillet(billet);
+
+        System.out.println("Billet mis à jour avec succès!");
+    }
 
 
 

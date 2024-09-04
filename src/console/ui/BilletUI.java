@@ -43,7 +43,8 @@ public class BilletUI {
 
                 case 5:
                     System.out.println("Au revoir!");
-                    break;
+                    return;
+                    //break;
                 default:
                     System.out.println("Option invalide. Essayez encore.");
                     break;
