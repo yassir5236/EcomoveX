@@ -96,17 +96,16 @@ import java.util.UUID;
 
 public class Billet {
     private UUID id;
-    private UUID contratId;  // Remplace partenaireId par contratId
+    private UUID contratId;
     private TypeTransport typeTransport;
     private BigDecimal prixAchat;
     private BigDecimal prixVente;
     private Date dateVente;
     private StatutBillet statutBillet;
 
-    // Constructeur
     public Billet(UUID id, UUID contratId, TypeTransport typeTransport, BigDecimal prixAchat, BigDecimal prixVente, Date dateVente, StatutBillet statutBillet) {
         this.id = id;
-        this.contratId = contratId;  // Initialisation du nouvel attribut
+        this.contratId = contratId;
         this.typeTransport = typeTransport;
         this.prixAchat = prixAchat;
         this.prixVente = prixVente;
@@ -114,7 +113,6 @@ public class Billet {
         this.statutBillet = statutBillet;
     }
 
-    // Getters et Setters
     public UUID getId() {
         return id;
     }

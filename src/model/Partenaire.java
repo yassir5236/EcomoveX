@@ -13,7 +13,6 @@ public class Partenaire {
     private StatutPartenaire statutPartenaire;
     private Date dateCreation;
 
-    // Constructeur
     public Partenaire(UUID id, String nomCompagnie, String contactCommercial, TypeTransport typeTransport, String zoneGeographique, String conditionsSpeciales, StatutPartenaire statutPartenaire, Date dateCreation) {
         this.id = id;
         this.nomCompagnie = nomCompagnie;

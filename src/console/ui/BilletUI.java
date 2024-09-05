@@ -25,7 +25,7 @@ public class BilletUI {
             System.out.println("5. Quitter");
             System.out.print("Choisissez une option : ");
             choix = scanner.nextInt();
-            scanner.nextLine(); // Consommer la nouvelle ligne
+            scanner.nextLine();
 
             switch (choix) {
                 case 1:

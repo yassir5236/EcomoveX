@@ -11,18 +11,18 @@ import java.util.UUID;
 
 
 public class ContratDAO {
+    private final Connection connection = DatabaseConnection.getConnection();
 
     public void addContrat(Contrat contrat) {
         String query = "INSERT INTO contrat (id, date_debut, date_fin, tarif_special, conditions_accord, renouvelable, statut_contrat, partenaire_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?::statut_contrat, ?)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, contrat.getId());
             statement.setDate(2, new java.sql.Date(contrat.getDateDebut().getTime()));
 
-            // Vérifie si la date de fin est null
             if (contrat.getDateFin() != null) {
                 statement.setDate(3, new java.sql.Date(contrat.getDateFin().getTime()));
             } else {
@@ -46,7 +46,7 @@ public class ContratDAO {
         List<Contrat> contrats = new ArrayList<>();
         String query = "SELECT * FROM contrat";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -61,7 +61,6 @@ public class ContratDAO {
                         StatutContrat.valueOf(resultSet.getString("statut_contrat").toUpperCase())
                 );
 
-                // Extraction de l'ID du partenaire s'il n'est pas null
                 String partenaireIdStr = resultSet.getString("partenaire_id");
                 if (partenaireIdStr != null) {
                     UUID partenaireId = UUID.fromString(partenaireIdStr);
@@ -82,7 +81,7 @@ public class ContratDAO {
         Contrat contrat = null;
         String query = "SELECT * FROM contrat WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);
@@ -114,7 +113,7 @@ public class ContratDAO {
     public void updateContrat(Contrat contrat) {
         String query = "UPDATE contrat SET date_debut = ?, date_fin = ?, tarif_special = ?, conditions_accord = ?, renouvelable = ?, statut_contrat = CAST(? AS statut_contrat) WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setDate(1, new java.sql.Date(contrat.getDateDebut().getTime())); // Conversion correcte
@@ -134,7 +133,7 @@ public class ContratDAO {
     public void deleteContrat(UUID id) {
         String query = "DELETE FROM contrat WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);

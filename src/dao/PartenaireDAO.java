@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class PartenaireDAO {
+    private final Connection conn = DatabaseConnection.getConnection();
 
-    // Ajouter un partenaire
     public void ajouterPartenaire(Partenaire partenaire) {
-        //String sql = "INSERT INTO partenaire (id, nom_compagnie, contact_commercial, type_transport, zone_geographique, conditions_speciales, statut_partenaire, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String sql = "INSERT INTO partenaire (id, nom_compagnie, contact_commercial, type_transport, zone_geographique, conditions_speciales, statut_partenaire, date_creation) VALUES (?, ?, ?, ?::type_transport, ?, ?, ?::statut_partenaire, ?)";
 
         try (
-                Connection conn = DatabaseConnection.getConnection();
+
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setObject(1, partenaire.getId());
@@ -40,11 +39,10 @@ public class PartenaireDAO {
         }
     }
 
-    // Mettre à jour un partenaire
     public void modifierPartenaire(Partenaire partenaire) {
         String sql = "UPDATE partenaire SET nom_compagnie = ?, contact_commercial = ?, type_transport = CAST(? AS type_transport), zone_geographique = ?, conditions_speciales = ?, statut_partenaire = CAST(? AS statut_partenaire), date_creation = ? WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, partenaire.getNomCompagnie());
@@ -67,32 +65,28 @@ public class PartenaireDAO {
     public void supprimerPartenaire(UUID id) {
         String sql = "DELETE FROM partenaire WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setObject(1, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            // Vous pouvez également lancer une exception personnalisée si nécessaire
             throw new RuntimeException("Erreur lors de la suppression du partenaire.", e);
         }
     }
 
 
-    // Lire un partenaire par ID
     public Partenaire lirePartenaire(UUID id) {
         String sql = "SELECT * FROM partenaire WHERE id = ?";
         Partenaire partenaire = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setObject(1, id);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // Convertir java.sql.Date en java.util.Date
                 Date sqlDate = rs.getDate("date_creation");
                 java.util.Date utilDate = new java.util.Date(sqlDate.getTime());
 
@@ -120,8 +114,7 @@ public class PartenaireDAO {
         List<Partenaire> partenaires = new ArrayList<>();
         String sql = "SELECT * FROM partenaire";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {

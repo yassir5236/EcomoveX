@@ -56,33 +56,30 @@ public class DatabaseConnection {
 
     private static Connection connection;
 
-    // Constructeur privé pour empêcher l'instanciation
     private DatabaseConnection() {
-        // Vous pouvez éventuellement charger le driver JDBC ici si nécessaire
     }
 
-    // Méthode statique pour obtenir la connexion
     public static synchronized Connection getConnection() {
         if (connection == null) {
             try {
+                System.out.println("here before initializing connection");
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             } catch (SQLException e) {
                 e.printStackTrace();
-                // Vous pouvez lancer une exception ou gérer l'erreur d'une autre manière
+
             }
         }
         return connection;
     }
 
-    // Méthode statique pour fermer la connexion
     public static synchronized void closeConnection() {
         if (connection != null) {
             try {
                 connection.close();
-                connection = null; // Réinitialiser la connexion après la fermeture
+                connection = null;
             } catch (SQLException e) {
                 e.printStackTrace();
-                // Vous pouvez lancer une exception ou gérer l'erreur d'une autre manière
+
             }
         }
     }

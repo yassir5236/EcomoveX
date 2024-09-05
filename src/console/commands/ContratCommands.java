@@ -11,6 +11,7 @@ import java.util.List;
 
 import java.sql.Date;
 import java.math.BigDecimal;
+import java.util.InputMismatchException;
 
 
 
@@ -33,33 +34,100 @@ public class ContratCommands {
         System.out.println("=== Ajouter un contrat ===");
 
         UUID id = UUID.randomUUID();
+        UUID partenaireId = null;
 
-        System.out.print("Entrez l'ID du partenaire : ");
-        String partenaireIdStr = scanner.nextLine();
-        UUID partenaireId = UUID.fromString(partenaireIdStr);
+        // Validation de l'UUID du partenaire
+        while (partenaireId == null) {
+            System.out.print("Entrez l'ID du partenaire : ");
+            String partenaireIdStr = scanner.nextLine();
+            try {
+                partenaireId = UUID.fromString(partenaireIdStr);
+            } catch (IllegalArgumentException e) {
+                System.out.println("ID de partenaire invalide. Veuillez réessayer.");
+            }
+        }
 
-        System.out.print("Entrez la date de début (YYYY-MM-DD) : ");
-        String dateDebutStr = scanner.nextLine();
-        Date dateDebut = Date.valueOf(dateDebutStr);
+        Date dateDebut = null;
+        // Validation de la date de début
+        while (dateDebut == null) {
+            System.out.print("Entrez la date de début (YYYY-MM-DD) : ");
+            String dateDebutStr = scanner.nextLine();
+            try {
+                dateDebut = Date.valueOf(dateDebutStr);
+                if (dateDebut.before(new java.util.Date())) {
+                    System.out.println("La date de début ne peut pas être antérieure à la date actuelle.");
+                    dateDebut = null;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Format de date invalide. Veuillez utiliser le format YYYY-MM-DD.");
+            }
+        }
 
-        System.out.print("Entrez la date de fin (YYYY-MM-DD) (laisser vide si indéfinie) : ");
-        String dateFinStr = scanner.nextLine();
-        Date dateFin = dateFinStr.isEmpty() ? null : Date.valueOf(dateFinStr);
+        Date dateFin = null;
+        // Validation de la date de fin (optionnelle)
+        while (true) {
+            System.out.print("Entrez la date de fin (YYYY-MM-DD) (laisser vide si indéfinie) : ");
+            String dateFinStr = scanner.nextLine();
+            if (dateFinStr.isEmpty()) {
+                break;
+            }
+            try {
+                dateFin = Date.valueOf(dateFinStr);
+                if (dateFin != null && dateFin.before(dateDebut)) {
+                    System.out.println("La date de fin ne peut pas être antérieure à la date de début.");
+                    dateFin = null;
+                } else {
+                    break;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Format de date invalide. Veuillez utiliser le format YYYY-MM-DD.");
+            }
+        }
 
-        System.out.print("Entrez le tarif spécial : ");
-        BigDecimal tarifSpecial = BigDecimal.valueOf(scanner.nextDouble());
+        BigDecimal tarifSpecial = null;
+        // Validation du tarif spécial
+        while (tarifSpecial == null) {
+            System.out.print("Entrez le tarif spécial : ");
+            try {
+                tarifSpecial = BigDecimal.valueOf(scanner.nextDouble());
+                if (tarifSpecial.compareTo(BigDecimal.ZERO) < 0) {
+                    System.out.println("Le tarif spécial ne peut pas être négatif.");
+                    tarifSpecial = null;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Le tarif doit être un nombre valide.");
+                scanner.nextLine(); // Consomme la ligne incorrecte
+            }
+        }
         scanner.nextLine(); // Consomme la nouvelle ligne
 
         System.out.print("Entrez les conditions de l'accord : ");
         String conditionsAccord = scanner.nextLine();
 
-        System.out.print("Le contrat est-il renouvelable ? (true/false) : ");
-        boolean renouvelable = scanner.nextBoolean();
-        scanner.nextLine(); // Consomme la nouvelle ligne
+        boolean renouvelable = false;
+        // Validation de la valeur renouvelable
+        while (true) {
+            System.out.print("Le contrat est-il renouvelable ? (true/false) : ");
+            String renouvelableStr = scanner.nextLine();
+            if (renouvelableStr.equalsIgnoreCase("true") || renouvelableStr.equalsIgnoreCase("false")) {
+                renouvelable = Boolean.parseBoolean(renouvelableStr);
+                break;
+            } else {
+                System.out.println("Veuillez entrer 'true' ou 'false'.");
+            }
+        }
 
-        System.out.print("Entrez le statut du contrat (EN_COURS, TERMINE, SUSPENDU) : ");
-        String statutContratStr = scanner.nextLine();
-        StatutContrat statutContrat = StatutContrat.valueOf(statutContratStr);
+        StatutContrat statutContrat = null;
+        // Validation du statut du contrat
+        while (statutContrat == null) {
+            System.out.print("Entrez le statut du contrat (EN_COURS, TERMINE, SUSPENDU) : ");
+            String statutContratStr = scanner.nextLine();
+            try {
+                statutContrat = StatutContrat.valueOf(statutContratStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("Statut du contrat invalide. Veuillez entrer l'une des valeurs suivantes : EN_COURS, TERMINE, SUSPENDU.");
+            }
+        }
 
         Contrat contrat = new Contrat(id, dateDebut, dateFin, tarifSpecial, conditionsAccord, renouvelable, statutContrat);
         contrat.setPartenaireId(partenaireId); // Associe le contrat à un partenaire

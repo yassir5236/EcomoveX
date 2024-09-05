@@ -14,10 +14,9 @@ public class Contrat {
     private StatutContrat statutContrat;
     private UUID partenaireId;
 
-    // Constructeur pour création de nouveau contrat
     public Contrat(Date dateDebut, Date dateFin, BigDecimal tarifSpecial,
                    String conditionsAccord, boolean renouvelable, StatutContrat statutContrat) {
-        this.id = UUID.randomUUID(); // ID généré automatiquement
+        this.id = UUID.randomUUID();
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.tarifSpecial = tarifSpecial;
@@ -26,7 +25,6 @@ public class Contrat {
         this.statutContrat = statutContrat;
     }
 
-    // Constructeur pour lecture depuis la base de données
     public Contrat(UUID id, Date dateDebut, Date dateFin, BigDecimal tarifSpecial,
                    String conditionsAccord, boolean renouvelable, StatutContrat statutContrat) {
         this.id = id;
@@ -39,7 +37,6 @@ public class Contrat {
         this.partenaireId = partenaireId;
     }
 
-    // Getters et Setters
     public UUID getId() {
         return id;
     }

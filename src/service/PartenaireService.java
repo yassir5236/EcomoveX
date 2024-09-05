@@ -28,10 +28,10 @@ public class PartenaireService {
     public boolean deletePartenaire(UUID id) {
         try {
             partenaireDAO.supprimerPartenaire(id);
-            return true; // Suppression réussie
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Échec de la suppression
+            return false;
         }
     }
 }

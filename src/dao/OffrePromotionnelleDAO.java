@@ -138,12 +138,14 @@ import java.util.UUID;
 
 public class OffrePromotionnelleDAO {
 
+    private final Connection connection = DatabaseConnection.getConnection();
+
     public void addOffrePromotionnelle(OffrePromotionnelle offre) {
         String query = "INSERT INTO offre_promotionnelle (id, nom_offre, description, date_debut, date_fin, type_reduction, " +
                 "valeur_reduction, conditions, statut_offre, contrat_id) VALUES (?, ?, ?, ?, ?, ?::type_reduction, ?, ?, ?::statut_offre, ?)";
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, offre.getId());
@@ -173,7 +175,7 @@ public class OffrePromotionnelleDAO {
         List<OffrePromotionnelle> offres = new ArrayList<>();
         String query = "SELECT * FROM offre_promotionnelle";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -209,7 +211,7 @@ public class OffrePromotionnelleDAO {
         OffrePromotionnelle offre = null;
         String query = "SELECT * FROM offre_promotionnelle WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);
@@ -241,7 +243,7 @@ public class OffrePromotionnelleDAO {
                 "type_reduction = CAST(? AS type_reduction), valeur_reduction = ?, conditions = ?, " +
                 "statut_offre = CAST(? AS statut_offre), contrat_id = ? WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, offre.getNomOffre());
@@ -264,7 +266,7 @@ public class OffrePromotionnelleDAO {
     public void deleteOffrePromotionnelle(UUID id) {
         String query = "DELETE FROM offre_promotionnelle WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);

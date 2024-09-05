@@ -22,7 +22,7 @@ public class ContratUI {
             System.out.print("Choisissez une option : ");
 
             int choix = scanner.nextInt();
-            scanner.nextLine(); // Consomme la nouvelle ligne
+            scanner.nextLine();
 
             switch (choix) {
                 case 1:

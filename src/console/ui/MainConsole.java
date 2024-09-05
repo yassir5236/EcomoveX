@@ -132,10 +132,10 @@ public class MainConsole {
         int choix = -1;
         try {
             choix = scanner.nextInt();
-            scanner.nextLine(); // Consommer la nouvelle ligne
+            scanner.nextLine();
         } catch (InputMismatchException e) {
             System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-            scanner.nextLine(); // Consomme l'entrée incorrecte
+            scanner.nextLine();
         }
         return choix;
     }

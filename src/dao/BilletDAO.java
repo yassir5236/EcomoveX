@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class BilletDAO {
-
+    private final Connection connection = DatabaseConnection.getConnection();
 
 
 
@@ -29,8 +29,7 @@ public class BilletDAO {
         String query = "INSERT INTO billet (id, contrat_id, type_transport, prix_achat, prix_vente, date_vente, statut_billet) " +
                 "VALUES (?, ?, ?::type_transport, ?, ?, ?, ?::statut_billet)";
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, billet.getId());
             statement.setObject(2, billet.getContratId());  // Insertion du contrat_id
@@ -52,7 +51,7 @@ public class BilletDAO {
         List<Billet> billets = new ArrayList<>();
         String query = "SELECT * FROM billet";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
@@ -85,7 +84,7 @@ public class BilletDAO {
         Billet billet = null;
         String query = "SELECT * FROM billet WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);
@@ -112,7 +111,7 @@ public class BilletDAO {
     public void updateBillet(Billet billet) {
         String query = "UPDATE billet SET contrat_id = ?, type_transport = CAST(? AS type_transport), prix_achat = ?, prix_vente = ?, date_vente = ?, statut_billet = CAST(? AS statut_billet) WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, billet.getContratId());  // Mise à jour du contratId
@@ -132,7 +131,7 @@ public class BilletDAO {
     public void deleteBillet(UUID id) {
         String query = "DELETE FROM billet WHERE id = ?";
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setObject(1, id);

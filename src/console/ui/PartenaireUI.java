@@ -56,7 +56,7 @@ import console.commands.*;
 public class PartenaireUI {
     private final PartenaireCommands partenaireCommands = new PartenaireCommands();
 
-    public void start(Scanner scanner) { // Passer le scanner en paramètre
+    public void start(Scanner scanner) {
         boolean running = true;
 
         while (running) {
@@ -70,7 +70,7 @@ public class PartenaireUI {
 
             if (scanner.hasNextInt()) {
                 int choix = scanner.nextInt();
-                scanner.nextLine();  // Consomme la nouvelle ligne
+                scanner.nextLine();
 
                 switch (choix) {
                     case 1:
@@ -94,7 +94,7 @@ public class PartenaireUI {
                 }
             } else {
                 System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-                scanner.nextLine(); // Consomme l'entrée incorrecte
+                scanner.nextLine();
             }
         }
     }

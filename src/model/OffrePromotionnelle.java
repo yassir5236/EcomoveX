@@ -112,13 +112,11 @@ public class OffrePromotionnelle {
     private BigDecimal valeurReduction;
     private String conditions;
     private StatutOffre statutOffre;
-    private UUID contratId; // Lien avec un contrat
+    private UUID contratId;
 
-    // Constructeur par défaut
     public OffrePromotionnelle() {
     }
 
-    // Constructeur avec paramètres
     public OffrePromotionnelle(UUID id, String nomOffre, String description, Date dateDebut, Date dateFin,
                                TypeReduction typeReduction, BigDecimal valeurReduction, String conditions,
                                StatutOffre statutOffre, UUID contratId) {
